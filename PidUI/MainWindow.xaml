@@ -1,0 +1,40 @@
+﻿<Window x:Class="PidUI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PidUI"
+        mc:Ignorable="d"
+        Title="PID UI" Height="450" Width="800">
+    
+    <Grid>
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="70*"/>
+            <ColumnDefinition Width="30*"/>
+        </Grid.ColumnDefinitions>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80*"/>
+            <RowDefinition Height="20*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="1" Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30*"/>
+                <RowDefinition Height="70*"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock 
+                Grid.Row="0"
+                Text="ADD PID" VerticalAlignment="Center" Margin="5"/>
+
+        </Grid>
+
+        <Rectangle Grid.Row="0" Grid.Column="0" Fill="LightCoral" Margin="5"/>
+        <Rectangle Grid.Row="0" Grid.Column="1" Fill="LightBlue"/>
+        <Rectangle Grid.Row="1" Grid.Column="1" Fill="Green"/>
+
+    </Grid>
+    
+</Window>
