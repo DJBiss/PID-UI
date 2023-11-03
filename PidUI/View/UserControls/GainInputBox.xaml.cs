@@ -15,14 +15,24 @@ using System.Windows.Shapes;
 
 namespace PidUI.View.UserControls
 {
-    /// <summary>
-    /// Interaction logic for GainTextBox.xaml
-    /// </summary>
-    public partial class GainTextBox : UserControl
+    public partial class GainInputBox : UserControl
     {
-        public GainTextBox()
+        public GainInputBox()
         {
             InitializeComponent();
         }
+
+        private string gainName;
+
+        public string GainName
+        {
+            get { return gainName; }
+            set 
+            { 
+                gainName = value;
+                tbGain.Text = gainName;
+            }
+        }
+
     }
 }

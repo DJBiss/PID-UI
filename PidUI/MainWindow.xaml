@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PidUI"
+        xmlns:userControls="clr-namespace:PidUI.View.UserControls"
         mc:Ignorable="d"
         Title="PID UI" Height="450" Width="800">
     
@@ -13,26 +14,40 @@
             <ColumnDefinition Width="70*"/>
             <ColumnDefinition Width="30*"/>
         </Grid.ColumnDefinitions>
-        
+
         <Grid.RowDefinitions>
-            <RowDefinition Height="80*"/>
-            <RowDefinition Height="20*"/>
+            <RowDefinition Height="85*"/>
+            <RowDefinition Height="15*"/>
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="1" Grid.Column="0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="30*"/>
-                <RowDefinition Height="70*"/>
-            </Grid.RowDefinitions>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
 
-            <TextBlock 
-                Grid.Row="0"
-                Text="ADD PID" VerticalAlignment="Center" Margin="5"/>
+                <Grid Grid.Row="0">
+                    <TextBlock Grid.Column="0" Grid.Row="0" Text="Set PID Gains" VerticalAlignment="Center" 
+                               HorizontalAlignment="Center" Margin="5"/>
+                </Grid>
 
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <userControls:GainInputBox Grid.Column="0" x:Name="PropGain" GainName="Proportional: "/>
+                    <userControls:GainInputBox Grid.Column="1" x:Name="IntGain" GainName="Integral: "/>
+                    <userControls:GainInputBox Grid.Column="2" x:Name="DerivGain" GainName="Derivative: "/>
+
+                </Grid>
+            </Grid>
         </Grid>
 
         <Rectangle Grid.Row="0" Grid.Column="0" Fill="LightCoral" Margin="5"/>
-        <Rectangle Grid.Row="0" Grid.Column="1" Fill="LightBlue"/>
         <Rectangle Grid.Row="1" Grid.Column="1" Fill="Green"/>
 
     </Grid>

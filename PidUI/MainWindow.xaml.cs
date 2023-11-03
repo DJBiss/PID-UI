@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Diagnostics;
+using System.Windows;
 
 namespace PidUI
 {
@@ -9,5 +10,6 @@ namespace PidUI
         {
             InitializeComponent();
         }
+
     }
 }
