@@ -4,10 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PidUI"
-        xmlns:userControls="clr-namespace:PidUI.View.UserControls"
+        xmlns:userControls="clr-namespace:PidUI.View.UserControls" 
+        xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
         mc:Ignorable="d"
-        Title="PID UI" Height="450" Width="800">
-    
+        Title="PID UI" Height="450" Width="800" FontSize="18">
+
     <Grid>
         
         <Grid.ColumnDefinitions>
@@ -15,40 +16,66 @@
             <ColumnDefinition Width="30*"/>
         </Grid.ColumnDefinitions>
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="85*"/>
-            <RowDefinition Height="15*"/>
-        </Grid.RowDefinitions>
+        <Grid Grid.Column="0">
+            <lvc:CartesianChart
+                Series="{Binding SeriesCollection}">
+            </lvc:CartesianChart>
+        </Grid>
 
-        <Grid Grid.Row="1" Grid.Column="0">
+
+        <Grid Grid.Column="1">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
+                    <RowDefinition Height="60*"/>
+                    <RowDefinition Height="40*"/>
                 </Grid.RowDefinitions>
 
                 <Grid Grid.Row="0">
-                    <TextBlock Grid.Column="0" Grid.Row="0" Text="Set PID Gains" VerticalAlignment="Center" 
-                               HorizontalAlignment="Center" Margin="5"/>
+                    <StackPanel Margin="5 5 5 0">
+                        <Label Content="Set PID Gains" HorizontalAlignment="Center" FontSize="24"/>
+                        <Separator Height="20"/>
+
+                        <StackPanel Orientation="Horizontal" Margin="0 0 0 5">
+                            <Label Width="150" Content="Proportional"/>
+                            <TextBox MinWidth="75" MaxWidth="75" Text="{Binding SelectedPid.KP, UpdateSourceTrigger=LostFocus}"
+                                     VerticalContentAlignment="Center"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0 0 0 5">
+                            <Label Width="150" Content="Integral"/>
+                            <TextBox MinWidth="75" MaxWidth="75" Text="{Binding SelectedPid.KI, UpdateSourceTrigger=LostFocus}"
+                                     VerticalContentAlignment="Center"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0 0 0 5">
+                            <Label Width="150" Content="Derivative"/>
+                            <TextBox MinWidth="75" MaxWidth="75" Text="{Binding SelectedPid.KD, UpdateSourceTrigger=LostFocus}"
+                                     VerticalContentAlignment="Center"/>
+                        </StackPanel>
+                        
+                        <Separator Height="20"/>
+                        <Button Height="40" Content="Run Simulation" Background="Green" Command="{Binding RunCommand}"/>
+                    </StackPanel>
+
                 </Grid>
 
                 <Grid Grid.Row="1">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-
-                    <userControls:GainInputBox Grid.Column="0" x:Name="PropGain" GainName="Proportional: "/>
-                    <userControls:GainInputBox Grid.Column="1" x:Name="IntGain" GainName="Integral: "/>
-                    <userControls:GainInputBox Grid.Column="2" x:Name="DerivGain" GainName="Derivative: "/>
-
+                    <DataGrid
+                        ItemsSource="{Binding PidControllers}"
+                        SelectedItem="{Binding SelectedPid}"
+                        CanUserAddRows="False" CanUserDeleteRows="False"
+                        AutoGenerateColumns="False" HorizontalContentAlignment="Center">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="kP" Binding="{Binding KP}" Width="4*"/>
+                            <DataGridTextColumn Header="kI" Binding="{Binding KI}" Width="4*"/>
+                            <DataGridTextColumn Header="kD" Binding="{Binding KD}" Width="4*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
                 </Grid>
+
+
             </Grid>
         </Grid>
-
-        <Rectangle Grid.Row="0" Grid.Column="0" Fill="LightCoral" Margin="5"/>
-        <Rectangle Grid.Row="1" Grid.Column="1" Fill="Green"/>
 
     </Grid>
     
