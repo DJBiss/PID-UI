@@ -1,16 +1,17 @@
 ﻿<Window x:Class="PidUI.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:PidUI"
-        xmlns:userControls="clr-namespace:PidUI.View.UserControls" 
         xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
         mc:Ignorable="d"
-        Title="PID UI" Height="450" Width="800" FontSize="18">
+        Title="PID UI" Height="600" Width="1000" FontSize="18">
+
+    <Window.Resources>
+
+    </Window.Resources>
 
     <Grid>
-        
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="70*"/>
             <ColumnDefinition Width="30*"/>
@@ -18,10 +19,10 @@
 
         <Grid Grid.Column="0">
             <lvc:CartesianChart
-                Series="{Binding SeriesCollection}">
+                Name="Plot" Series="{Binding SeriesCollection}" LegendPosition="Left"
+                XAxes="{Binding XAxes}">
             </lvc:CartesianChart>
         </Grid>
-
 
         <Grid Grid.Column="1">
             <Grid>
@@ -35,36 +36,65 @@
                         <Label Content="Set PID Gains" HorizontalAlignment="Center" FontSize="24"/>
                         <Separator Height="20"/>
 
-                        <StackPanel Orientation="Horizontal" Margin="0 0 0 5">
+                        <UniformGrid Rows="4" Columns="2">
+                            <UniformGrid.Resources>
+                                <Style TargetType="{x:Type Button}">
+                                    <Setter Property="Margin" Value="5"/>
+                                </Style>
+                                <Style TargetType="{x:Type TextBox}">
+                                    <Setter Property="Margin" Value="5"/>
+                                </Style>
+                            </UniformGrid.Resources>
+                            
                             <Label Width="150" Content="Proportional"/>
-                            <TextBox MinWidth="75" MaxWidth="75" Text="{Binding SelectedPid.KP, UpdateSourceTrigger=LostFocus}"
+                            <TextBox Name="Proportional" Text="{Binding SelectedPid.KP, UpdateSourceTrigger=LostFocus}"
                                      VerticalContentAlignment="Center"/>
-                        </StackPanel>
 
-                        <StackPanel Orientation="Horizontal" Margin="0 0 0 5">
                             <Label Width="150" Content="Integral"/>
-                            <TextBox MinWidth="75" MaxWidth="75" Text="{Binding SelectedPid.KI, UpdateSourceTrigger=LostFocus}"
+                            <TextBox Name="Integral" Text="{Binding SelectedPid.KI, UpdateSourceTrigger=LostFocus}"
                                      VerticalContentAlignment="Center"/>
-                        </StackPanel>
 
-                        <StackPanel Orientation="Horizontal" Margin="0 0 0 5">
                             <Label Width="150" Content="Derivative"/>
-                            <TextBox MinWidth="75" MaxWidth="75" Text="{Binding SelectedPid.KD, UpdateSourceTrigger=LostFocus}"
+                            <TextBox Name="Derivative" Text="{Binding SelectedPid.KD, UpdateSourceTrigger=LostFocus}"
                                      VerticalContentAlignment="Center"/>
-                        </StackPanel>
-                        
+
+                            <Button Content="New PID" Command="{Binding AddCommand}"/>
+                            <Button Content="Delete" Command="{Binding DeleteCommand}"/>
+                        </UniformGrid>
+
                         <Separator Height="20"/>
-                        <Button Height="40" Content="Run Simulation" Background="Green" Command="{Binding RunCommand}"/>
+                        <Button Height="40" Content="Run Simulation" Background="Green" 
+                                Margin="5"  Command="{Binding RunCommand}"/>
                     </StackPanel>
 
                 </Grid>
 
-                <Grid Grid.Row="1">
+                <Grid Grid.Row="1" Margin="5">
                     <DataGrid
                         ItemsSource="{Binding PidControllers}"
                         SelectedItem="{Binding SelectedPid}"
                         CanUserAddRows="False" CanUserDeleteRows="False"
-                        AutoGenerateColumns="False" HorizontalContentAlignment="Center">
+                        AutoGenerateColumns="False" HorizontalContentAlignment="Center"
+                        FontSize="14" GridLinesVisibility="None" HorizontalScrollBarVisibility="Hidden"
+                        VerticalScrollBarVisibility="Hidden">
+
+                        <DataGrid.Resources>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="BorderThickness" Value="0 0 0 0" />
+                                <Setter Property="BorderBrush" Value="Red" />
+                                <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                            </Style>
+                            <Style TargetType="DataGrid">
+                                <Setter Property="Background" Value="Transparent" />
+                                <Setter Property="BorderThickness" Value="0" />
+                            </Style>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="Background" Value="Transparent" />
+                                <Setter Property="BorderBrush" Value="Black" />
+                                <Setter Property="BorderThickness" Value="0 0 0 1" />
+                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                            </Style>
+                        </DataGrid.Resources>
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="kP" Binding="{Binding KP}" Width="4*"/>
                             <DataGridTextColumn Header="kI" Binding="{Binding KI}" Width="4*"/>

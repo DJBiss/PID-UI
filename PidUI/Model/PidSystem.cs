@@ -9,7 +9,8 @@ namespace PidUI.Model
     class PidSystem
     {
         private readonly Plant systemPlant;
-        private readonly PidController pid;
+        public readonly PidController pid;
+
 
         public PidSystem(Plant systemPlant, PidController pid)
         {

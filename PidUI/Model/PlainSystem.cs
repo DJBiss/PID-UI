@@ -1,4 +1,5 @@
-﻿using NumSharp;
+﻿using Microsoft.VisualBasic;
+using NumSharp;
 using System.Collections.Generic;
 
 namespace PidUI.Model
@@ -6,6 +7,8 @@ namespace PidUI.Model
     class PlainSystem
     {
         private readonly Plant plant;
+
+
         public PlainSystem(Plant plant)
         {
             this.plant = plant;
@@ -22,6 +25,7 @@ namespace PidUI.Model
 
                 timeStamps.Add(timeVec[i]);
                 sysOutputs.Add(y_i);
+
             }
 
             double[] sysOutputArray = sysOutputs.ToArray();
