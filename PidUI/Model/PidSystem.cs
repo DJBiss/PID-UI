@@ -23,13 +23,13 @@ namespace PidUI.Model
         /// </summary>
         /// <param name="timeVec"> NDArray with timesteps to simulate system at </param>
         /// <returns></returns>
-        public double[] RunSimulation(NDArray timeVec)
+        public double[] RunSimulation(double[] timeVec)
         {
             List<double> timeStamps = new(); // to store the timesteps at each iteration
             List<double> sysOutputs = new(); // to store the outputs at each iteration
 
             double y_i = 0f; // initial condition
-            for (int i = 0; i < timeVec.size; i++)
+            for (int i = 0; i < timeVec.Length; i++)
             {
                 double pidOutput = pid.CalculateOutput(target: 1f, current: y_i);
                 y_i = systemPlant.SimulatePlant(pidOutput);

@@ -1,18 +1,23 @@
 ﻿using LiveChartsCore;
+using LiveChartsCore.Defaults;
 using LiveChartsCore.Drawing;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
-using LiveChartsCore.SkiaSharpView.Painting.Effects;
 using NumSharp;
 using PidUI.Model;
 using PidUI.MVVM;
 using SkiaSharp;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace PidUI.ViewModel
 {
     internal class MainWindowViewModel : ViewModelBase
     {
+        //colours for axes
+        private static readonly SKColor black = SKColors.Black;
+        private static readonly SKColor s_gray1 = new(160, 160, 160);
+        private static readonly SKColor s_gray2 = new(90, 90, 90);
 
         public ObservableCollection<ISeries> SeriesCollection { get; set; }
         public ObservableCollection<PidController> PidControllers { get; set; }
@@ -25,9 +30,10 @@ namespace PidUI.ViewModel
         public MainWindowViewModel()
         {
             SeriesCollection = new ObservableCollection<ISeries>();
-            PidControllers = new ObservableCollection<PidController>();
-
-            PidControllers.Add(new PidController(0.05d, true, true));
+            PidControllers = new ObservableCollection<PidController>
+            {
+                new PidController(0.05d, true, true)
+            };
         }
 
         private PidController selectedPid;
@@ -35,7 +41,7 @@ namespace PidUI.ViewModel
         public PidController SelectedPid
         {
             get { return selectedPid; }
-            set 
+            set
             {
                 selectedPid = value;
                 OnPropertyChanged();
@@ -47,14 +53,14 @@ namespace PidUI.ViewModel
             SeriesCollection.Clear();
             //TODO: refactor this into separate methods
 
-            NDArray timeVec = np.linspace(0d, 10d, 501);
+            double[] timeVec = np.linspace(0d, 10d, 501).ToArray<double>();
 
             PlainSystem plainSys = new PlainSystem(new Plant());
             double[] plainResults = plainSys.RunSimulation(timeVec);
 
-            SeriesCollection.Add(new LineSeries<double> 
+            SeriesCollection.Add(new LineSeries<ObservablePoint>
             {
-                Values = plainResults,
+                Values = FetchData(timeVec, plainResults),
                 Name = "Default",
                 Fill = null,
                 GeometryFill = null,
@@ -72,15 +78,26 @@ namespace PidUI.ViewModel
                 });
 
                 double[] results = pidSystem.RunSimulation(timeVec);
-                SeriesCollection.Add(new LineSeries<double>
+                SeriesCollection.Add(new LineSeries<ObservablePoint>
                 {
-                    Values = results,
+                    Values = FetchData(timeVec, results),
                     Name = $"{pidSystem.pid.KP}, {pidSystem.pid.KI}, {pidSystem.pid.KD}",
                     Fill = null,
                     GeometryFill = null,
                     GeometryStroke = null
                 });
             }
+        }
+
+        private static List<ObservablePoint> FetchData(double[] xData, double[] yData)
+        {
+            List<ObservablePoint> list = new();
+
+            for (int i = 0; i < xData.Length; i++)
+            {
+                list.Add(new ObservablePoint(xData[i], yData[i]));
+            }
+            return list;
         }
 
         private void AddPid()
@@ -98,25 +115,22 @@ namespace PidUI.ViewModel
             PidControllers.Remove(selectedPid);
         }
 
-        private static readonly SKColor s_gray = new(195, 195, 195);
-        private static readonly SKColor s_gray1 = new(160, 160, 160);
-        private static readonly SKColor s_gray2 = new(90, 90, 90);
-        private static readonly SKColor s_dark3 = new(60, 60, 60);
 
         public Axis[] XAxes { get; set; } =
         {
             new Axis
             {
-                Name = "X axis",
-                NamePaint = new SolidColorPaint(s_gray1),
+                Name = "Time [s]",
+                NamePaint = new SolidColorPaint(black),
                 TextSize = 18,
+                MinLimit = 0,
                 Padding = new Padding(5, 15, 5, 5),
-                LabelsPaint = new SolidColorPaint(s_gray),
+                LabelsPaint = new SolidColorPaint(black),
                 SeparatorsPaint = new SolidColorPaint
                 {
-                    Color = s_gray,
-                    StrokeThickness = 1,
-                    PathEffect = new DashEffect(new float[] { 3, 3 })
+                    Color = black,
+                    StrokeThickness = 1
+                    //PathEffect = new DashEffect(new float[] { 3, 3 })
                 },
                 SubseparatorsPaint = new SolidColorPaint
                 {
@@ -131,14 +145,64 @@ namespace PidUI.ViewModel
                 },
                 TicksPaint = new SolidColorPaint
                 {
-                    Color = s_gray,
+                    Color = black,
                     StrokeThickness = 1.5f
                 },
                 SubticksPaint = new SolidColorPaint
                 {
-                    Color = s_gray,
+                    Color = black,
                     StrokeThickness = 1
                 }
+            }
+        };
+
+        public Axis[] YAxes { get; set; } =
+        {
+            new Axis
+            {
+                Name = "Response []",
+                NamePaint = new SolidColorPaint(black),
+                TextSize = 18,
+                MinLimit = 0,
+                Padding = new Padding(5, 0, 15, 0),
+                LabelsPaint = new SolidColorPaint(black),
+                SeparatorsPaint = new SolidColorPaint
+                {
+                    Color = black,
+                    StrokeThickness = 1
+                    //PathEffect = new DashEffect(new float[] { 3, 3 })
+                },
+                SubseparatorsPaint = new SolidColorPaint
+                {
+                    Color = s_gray2,
+                    StrokeThickness = 0.5f
+                },
+                SubseparatorsCount = 9,
+                ZeroPaint = new SolidColorPaint
+                {
+                    Color = s_gray1,
+                    StrokeThickness = 2
+                },
+                TicksPaint = new SolidColorPaint
+                {
+                    Color = black,
+                    StrokeThickness = 1.5f
+                },
+                SubticksPaint = new SolidColorPaint
+                {
+                    Color = black,
+                    StrokeThickness = 1
+                }
+            }
+        };
+
+        public DrawMarginFrame Frame { get; set; } =
+        new()
+        {
+            Stroke = new SolidColorPaint
+            {
+                Color = black,
+                StrokeThickness = 2
             }
         };
     }

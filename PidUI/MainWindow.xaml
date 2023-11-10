@@ -20,7 +20,7 @@
         <Grid Grid.Column="0">
             <lvc:CartesianChart
                 Name="Plot" Series="{Binding SeriesCollection}" LegendPosition="Left"
-                XAxes="{Binding XAxes}">
+                XAxes="{Binding XAxes}" YAxes="{Binding YAxes}" DrawMarginFrame="{Binding Frame}">
             </lvc:CartesianChart>
         </Grid>
 

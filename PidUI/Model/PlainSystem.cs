@@ -14,12 +14,12 @@ namespace PidUI.Model
             this.plant = plant;
         }
 
-        public double[] RunSimulation(NDArray timeVec)
+        public double[] RunSimulation(double[] timeVec)
         {
             List<double> timeStamps = new List<double>(); // to store the timesteps at each iteration
             List<double> sysOutputs = new List<double>(); // to store the outputs at each iteration
 
-            for (int i = 0; i < timeVec.size; i++)
+            for (int i = 0; i < timeVec.Length; i++)
             {
                 double y_i = plant.SimulatePlant(1f);
 
