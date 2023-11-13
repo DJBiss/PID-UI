@@ -61,7 +61,7 @@ namespace PidUI.ViewModel
             SeriesCollection.Add(new LineSeries<ObservablePoint>
             {
                 Values = FetchData(timeVec, plainResults),
-                Name = "Default",
+                Name = "No PID",
                 Fill = null,
                 GeometryFill = null,
                 GeometryStroke = null
@@ -69,7 +69,6 @@ namespace PidUI.ViewModel
 
             foreach (PidController pid in PidControllers)
             {
-                //Trace.WriteLine($"{pid.KP}, {pid.KI}, {pid.KI}");
                 PidSystem pidSystem = new PidSystem(new Plant(), new PidController(0.05f, true, true)
                 {
                     KP = pid.KP,
@@ -81,7 +80,7 @@ namespace PidUI.ViewModel
                 SeriesCollection.Add(new LineSeries<ObservablePoint>
                 {
                     Values = FetchData(timeVec, results),
-                    Name = $"{pidSystem.pid.KP}, {pidSystem.pid.KI}, {pidSystem.pid.KD}",
+                    Name = $"[kP: {pidSystem.pid.KP}, kI: {pidSystem.pid.KI}, kD: {pidSystem.pid.KD}]",
                     Fill = null,
                     GeometryFill = null,
                     GeometryStroke = null
@@ -116,6 +115,11 @@ namespace PidUI.ViewModel
         }
 
 
+        public SolidColorPaint TooltipBackgroundPaint { get; set; } = new SolidColorPaint(new SKColor(40, 40, 40));
+
+        public SolidColorPaint TooltipTextPaint { get; set; } = new SolidColorPaint(new SKColor(205, 205, 205));
+
+
         public Axis[] XAxes { get; set; } =
         {
             new Axis
@@ -130,7 +134,6 @@ namespace PidUI.ViewModel
                 {
                     Color = black,
                     StrokeThickness = 1
-                    //PathEffect = new DashEffect(new float[] { 3, 3 })
                 },
                 SubseparatorsPaint = new SolidColorPaint
                 {

@@ -4,6 +4,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
+        xmlns:vms="clr-namespace:PidUI.ViewModel"
         mc:Ignorable="d"
         Title="PID UI" Height="600" Width="1000" FontSize="18">
 
@@ -19,8 +20,11 @@
 
         <Grid Grid.Column="0">
             <lvc:CartesianChart
-                Name="Plot" Series="{Binding SeriesCollection}" LegendPosition="Left"
+                Name="Plot" Series="{Binding SeriesCollection}" LegendPosition="Top"
                 XAxes="{Binding XAxes}" YAxes="{Binding YAxes}" DrawMarginFrame="{Binding Frame}">
+                <lvc:CartesianChart.Tooltip>
+                    <vms:CustomTooltip></vms:CustomTooltip>
+                </lvc:CartesianChart.Tooltip>
             </lvc:CartesianChart>
         </Grid>
 
