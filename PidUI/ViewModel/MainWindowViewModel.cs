@@ -32,7 +32,7 @@ namespace PidUI.ViewModel
             SeriesCollection = new ObservableCollection<ISeries>();
             PidControllers = new ObservableCollection<PidController>
             {
-                new PidController(0.05d, true, true)
+                new PidController(0.02d, true, false)
             };
         }
 
@@ -69,7 +69,7 @@ namespace PidUI.ViewModel
 
             foreach (PidController pid in PidControllers)
             {
-                PidSystem pidSystem = new PidSystem(new Plant(), new PidController(0.05f, true, true)
+                PidSystem pidSystem = new PidSystem(new Plant(), new PidController(0.02d, true, false)
                 {
                     KP = pid.KP,
                     KI = pid.KI,
