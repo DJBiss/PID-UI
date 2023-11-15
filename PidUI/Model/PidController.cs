@@ -28,7 +28,7 @@
         }
 
         /// <summary>
-        /// Calculate output of the PID at current timestep
+        /// Calculate output of the PID at current timestep 
         /// </summary>
         /// <param name="target"></param>
         /// <param name="current"></param>
