@@ -39,7 +39,7 @@
             double error = target - current;
             double cp = KP * error;
 
-            integralAccumulation += previousError * dt;
+            integralAccumulation += error * dt;
             double ci = KI * integralAccumulation;
 
             double cd;
